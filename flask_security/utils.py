@@ -13,6 +13,7 @@ import base64
 import hashlib
 import hmac
 import sys
+import pytz
 
 try:
     from urlparse import urlsplit
@@ -67,7 +68,7 @@ def login_user(user, remember=None):
         else:
             remote_addr = request.remote_addr or 'untrackable'
 
-        old_current_login, new_current_login = user.current_login_at, datetime.utcnow()
+        old_current_login, new_current_login = user.current_login_at, datetime.utcnow().replace(tzinfo=pytz.utc)
         old_current_ip, new_current_ip = user.current_login_ip, remote_addr
 
         user.last_login_at = old_current_login or new_current_login
